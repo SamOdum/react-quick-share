@@ -1,4 +1,4 @@
-![GitHub](https://img.shields.io/github/license/samodum/quick-share)
+![GitHub](https://img.shields.io/github/license/SamOdum/quick-share)
 
 # quick-share
 
