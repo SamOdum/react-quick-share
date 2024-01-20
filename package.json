@@ -1,0 +1,61 @@
+{
+    "name": "quick-share",
+    "version": "0.0.0-semantically-released",
+    "description": "A simple but robust social media share module",
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "rm -rf dist/ && prettier --write src/ && pnpm build:esm && pnpm build:cjs",
+        "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
+        "build:esm": "tsc",
+        "fix": "pnpm format",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "test": "jest --coverage",
+        "test:watch": "jest --watch",
+        "prepare": "husky install"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/samodum/quick-share.git"
+    },
+    "keywords": [],
+    "author": "Sam Odum",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/samodum/quick-share/issues"
+    },
+    "homepage": "https://github.com/samodum/quick-share#readme",
+    "devDependencies": {
+        "@testing-library/jest-dom": "^6.2.0",
+        "@testing-library/react": "^14.1.2",
+        "@testing-library/react-hooks": "^8.0.1",
+        "@types/jest": "^29.5.11",
+        "@types/node": "^20.11.5",
+        "@types/react": "^18.2.48",
+        "@types/react-dom": "^18.2.18",
+        "@typescript-eslint/eslint-plugin": "^6.19.0",
+        "@typescript-eslint/parser": "^6.19.0",
+        "eslint": "^8.56.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-import": "^2.29.1",
+        "eslint-plugin-jsx-a11y": "^6.8.0",
+        "eslint-plugin-react": "^7.33.2",
+        "husky": "^8.0.3",
+        "jest": "^29.7.0",
+        "jest-environment-jsdom": "^29.7.0",
+        "lint-staged": "^14.0.1",
+        "prettier": "^3.2.4",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "ts-jest": "^29.1.1",
+        "typescript": "^5.3.3"
+    },
+    "peerDependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    }
+}
