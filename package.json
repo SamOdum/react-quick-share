@@ -1,7 +1,7 @@
 {
-    "name": "quick-share",
+    "name": "react-quick-share",
     "version": "0.0.0-semantically-released",
-    "description": "A simple but robust social media share module",
+    "description": "A lightweight and highly customizable React module for integrating social media sharing buttons. It supports a variety of platforms, including Facebook, WhatsApp, Twitter, LinkedIn, Pinterest, Telegram, and Email, with additional support for custom extensions. Optimized for both desktop and mobile, react-quick-share provides a straightforward API that allows for easy embedding and styling of share buttons to enhance social sharing capabilities of web applications.",
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
     "files": [
@@ -10,31 +10,49 @@
     "scripts": {
         "build": "rm -rf dist/ && prettier --write src/ && pnpm build:esm && pnpm build:cjs",
         "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
-        "build:esm": "tsc",
+        "build:esm": "tsc --outDir dist/esm",
         "fix": "pnpm format",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "test": "jest --coverage",
+        "test:ci": "jest --coverage --runInBand",
         "test:watch": "jest --watch",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "ci": "pnpm ci && pnpm run test:ci && pnpm run build"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/samodum/quick-share.git"
+        "url": "git+https://github.com/samodum/react-quick-share.git"
     },
-    "keywords": [],
+    "keywords": [
+        "react",
+        "social-share",
+        "share-buttons",
+        "social-media",
+        "facebook",
+        "twitter",
+        "whatsapp",
+        "linkedin",
+        "pinterest",
+        "telegram",
+        "email",
+        "print",
+        "customizable",
+        "mobile-friendly",
+        "react-component"
+    ],
     "author": "Sam Odum",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/samodum/quick-share/issues"
+        "url": "https://github.com/samodum/react-quick-share/issues"
     },
-    "homepage": "https://github.com/samodum/quick-share#readme",
+    "homepage": "https://github.com/samodum/react-quick-share#readme",
     "devDependencies": {
-        "@testing-library/jest-dom": "^6.2.0",
-        "@testing-library/react": "^14.1.2",
+        "@testing-library/jest-dom": "^6.4.2",
+        "@testing-library/react": "^15.0.2",
         "@testing-library/react-hooks": "^8.0.1",
         "@types/jest": "^29.5.11",
-        "@types/node": "^20.11.5",
+        "@types/node": "^20.12.7",
         "@types/react": "^18.2.48",
         "@types/react-dom": "^18.2.18",
         "@typescript-eslint/eslint-plugin": "^6.19.0",
@@ -51,11 +69,16 @@
         "prettier": "^3.2.4",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "semantic-release": "^23.0.8",
         "ts-jest": "^29.1.1",
-        "typescript": "^5.3.3"
+        "typescript": "^5.3.3",
+        "ua-parser-js": "^1.0.37"
     },
     "peerDependencies": {
         "react": "^18.2.0",
         "react-dom": "^18.2.0"
+    },
+    "engines": {
+        "node": ">=16.0.0"
     }
 }
