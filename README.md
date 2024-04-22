@@ -1,12 +1,8 @@
 ![GitHub](https://img.shields.io/github/license/SamOdum/react-quick-share)
 
-# quick-share
+# React-Quick-Share
 
 A simple but robust social media share module that facilitates sharing content on some of the world's most popular social networks.
-
-## Demo
-
-[Demo Incoming](https://).
 
 ## Features
 
