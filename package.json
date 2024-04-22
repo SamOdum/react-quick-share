@@ -10,7 +10,8 @@
     "release": {
         "branches": [
             "main"
-        ]
+        ],
+        "repositoryUrl": "https://github.com/samodum/react-quick-share.git"
     },
     "scripts": {
         "build": "rm -rf dist/ && prettier --write src/ && pnpm build:esm && pnpm build:cjs",
