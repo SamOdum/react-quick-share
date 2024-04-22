@@ -8,11 +8,13 @@ on:
 jobs:
     semantic-release:
         runs-on: ubuntu-latest
+
         steps:
             - uses: actions/checkout@v3
+
             - uses: actions/setup-node@v3
               with:
-                  node-version: '16.x'
+                  node-version: '20'
                   cache: 'pnpm'
 
             - name: Install pnpm
