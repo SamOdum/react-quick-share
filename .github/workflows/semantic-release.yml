@@ -12,20 +12,14 @@ jobs:
         steps:
             - uses: actions/checkout@v3
 
+            - uses: pnpm/action-setup@v3
+              with:
+                  version: 8
+
             - uses: actions/setup-node@v3
               with:
                   node-version: '20'
                   cache: 'pnpm'
-
-            - name: Get npm global dir
-              id: npm-global
-              run: |
-                  echo "npmglobal=$(npm prefix -g)" >> $GITHUB_OUTPUT
-
-            - name: Install pnpm
-              run: npm install -g pnpm
-              env:
-                  PATH: ${{ steps.npm-global.outputs.npmglobal }}/bin:${{ env.PATH }}
 
             - name: Cache Node modules
               uses: actions/cache@v3
