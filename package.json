@@ -7,6 +7,11 @@
     "files": [
         "dist"
     ],
+    "release": {
+        "branches": [
+            "main"
+        ]
+    },
     "scripts": {
         "build": "rm -rf dist/ && prettier --write src/ && pnpm build:esm && pnpm build:cjs",
         "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
