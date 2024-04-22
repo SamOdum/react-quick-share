@@ -1,98 +1,132 @@
-import React, { FC } from 'react';
-import { useShare, ShareGroupKey } from '../hooks/useShare';
+import React from 'react';
+import { useShare } from '../hooks/useShare';
+import { ExtendShareGroupKey, IShareButtonProps, ISocialShareButtonProps, ShareGroupKey } from '../types';
 
-interface IShareButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
-    domain: ShareGroupKey;
-    url: string;
-    subject?: string;
-}
-
-export const ShareButton: FC<IShareButtonProps> = (props) => {
-    const { children, domain, url, subject, style } = props;
+/**
+ * Represents a button that triggers a sharing action.
+ * @param {IShareButtonProps} props The properties for the share button, including children, domain, url, subject, style, and other button properties.
+ * @returns {JSX.Element} A button element that, on click, performs a share action based on the specified domain.
+ */
+export const ShareButton = ({ children, domain, url = window.location.href, subject, style, ...rest }: IShareButtonProps) => {
     const { target } = useShare();
-    const _style = { border: 'none', margin: '0px', padding: '0px', ...style };
+    const buttonStyle = { border: 'none', margin: '0px', padding: '0px', ...style };
 
     return (
-        <button {...props} style={_style} onClick={() => target(domain, url, subject)}>
+        <button {...rest} style={buttonStyle} onClick={() => target(domain, url, subject)}>
             {children}
         </button>
     );
 };
 
-export const Print: FC<IShareButtonProps> = (props) => {
-    return (
-        <ShareButton {...props} domain="print" url="nothing">
-            {props.children}
-        </ShareButton>
-    );
-};
-
-export const Email: FC<IShareButtonProps> = (props) => {
-    const { children, url = window.location.href, subject } = props;
-
-    return (
-        <ShareButton {...props} domain="email" url={url} subject={subject}>
+/**
+ * Factory function to create a social share button specific to a social media platform.
+ * @param {ShareGroupKey} domain The domain key identifying the social media platform.
+ * @returns {Function} Returns a React component tailored for sharing to a specific social media platform.
+ */
+export const createSocialShareButton = (domain: ShareGroupKey | ExtendShareGroupKey) => {
+    const SocialShareButton = ({ children, ...props }: ISocialShareButtonProps) => (
+        <ShareButton domain={domain} {...props}>
             {children}
         </ShareButton>
     );
+
+    SocialShareButton.displayName = `${domain.charAt(0).toUpperCase()}${domain.slice(1)}ShareButton`;
+
+    return SocialShareButton;
 };
 
-export const Whatsapp: FC<IShareButtonProps> = (props) => {
-    const { children, url = window.location.href } = props;
+/**
+ * Creates a specific instance of a social share button designed for printing. This button
+ * is initialized using a utility function `createSocialShareButton` which configures
+ * the button specifically for the print functionality.
+ *
+ * Using this constant across the application ensures consistency in the behavior and
+ * appearance of print buttons. This approach encapsulates the print button configuration
+ * in a single place, making maintenance and updates easier by centralizing the button's
+ * setup.
+ *
+ * @constant {React.ComponentType<ISocialShareButtonProps>}
+ */
+export const Print = createSocialShareButton('print');
 
-    return (
-        <ShareButton {...props} domain="whatsapp" url={url}>
-            {children}
-        </ShareButton>
-    );
-};
+/**
+ * Creates a specific instance of a social share button designed for sharing via email.
+ * This button is initialized using the `createSocialShareButton` function, which configures
+ * the button specifically for email sharing.
+ *
+ * Using this constant ensures a uniform implementation of email sharing functionality
+ * across the application, promoting reuse and consistency.
+ *
+ * @constant {React.ComponentType<ISocialShareButtonProps>}
+ */
+export const Email = createSocialShareButton('email');
 
-export const Twitter: FC<IShareButtonProps> = (props) => {
-    const { children, url = window.location.href } = props;
+/**
+ * Creates a social share button for sharing content on WhatsApp. It is configured
+ * through the `createSocialShareButton` utility, setting up the necessary properties
+ * for WhatsApp integration.
+ *
+ * This promotes a consistent and reusable approach for WhatsApp sharing across different
+ * parts of the application.
+ *
+ * @constant {React.ComponentType<ISocialShareButtonProps>}
+ */
+export const Whatsapp = createSocialShareButton('whatsapp');
 
-    return (
-        <ShareButton {...props} domain="twitter" url={url}>
-            {children}
-        </ShareButton>
-    );
-};
+/**
+ * Initializes a social share button specifically for Twitter. This configuration
+ * is done using the `createSocialShareButton` function, ensuring the button is
+ * tailored for sharing on Twitter.
+ *
+ * It provides a standardized way to incorporate Twitter sharing functionality, enhancing
+ * the application's social media integration.
+ *
+ * @constant {React.ComponentType<ISocialShareButtonProps>}
+ */
+export const Twitter = createSocialShareButton('twitter');
 
-export const Facebook: FC<IShareButtonProps> = (props) => {
-    const { children, url = window.location.href } = props;
+/**
+ * Configures a social share button for Facebook. This button is set up through
+ * the `createSocialShareButton` function to align with Facebook's sharing requirements.
+ *
+ * This constant allows for consistent Facebook sharing capabilities across the application,
+ * simplifying social media interactions.
+ *
+ * @constant {React.ComponentType<ISocialShareButtonProps>}
+ */
+export const Facebook = createSocialShareButton('facebook');
 
-    return (
-        <ShareButton {...props} domain="facebook" url={url}>
-            {children}
-        </ShareButton>
-    );
-};
+/**
+ * Sets up a Pinterest-specific social share button using the `createSocialShareButton`
+ * function. This setup ensures the button is optimized for sharing content on Pinterest.
+ *
+ * The use of this constant across the application ensures a unified approach to
+ * Pinterest sharing.
+ *
+ * @constant {React.ComponentType<ISocialShareButtonProps>}
+ */
+export const Pinterest = createSocialShareButton('pinterest');
 
-export const Pinterest: FC<IShareButtonProps> = (props) => {
-    const { children, url = window.location.href } = props;
+/**
+ * Establishes a social share button for LinkedIn via the `createSocialShareButton`
+ * function. This button is specifically tailored for sharing professional content
+ * on LinkedIn.
+ *
+ * Utilizing this constant ensures that LinkedIn sharing is handled consistently,
+ * facilitating professional networking and content distribution.
+ *
+ * @constant {React.ComponentType<ISocialShareButtonProps>}
+ */
+export const Linkedin = createSocialShareButton('linkedin');
 
-    return (
-        <ShareButton {...props} domain="pinterest" url={url}>
-            {children}
-        </ShareButton>
-    );
-};
-
-export const Linkedin: FC<IShareButtonProps> = (props) => {
-    const { children, url = window.location.href } = props;
-
-    return (
-        <ShareButton {...props} domain="linkedin" url={url}>
-            {children}
-        </ShareButton>
-    );
-};
-
-export const Telegram: FC<IShareButtonProps> = (props) => {
-    const { children, url = window.location.href } = props;
-
-    return (
-        <ShareButton {...props} domain="telegram" url={url}>
-            {children}
-        </ShareButton>
-    );
-};
+/**
+ * Creates a social share button for Telegram, configured through the `createSocialShareButton`
+ * utility. This configuration is tailored to meet the sharing requirements specific to
+ * Telegram.
+ *
+ * This constant facilitates consistent implementation of Telegram sharing functionality,
+ * enhancing the application's capabilities in instant messaging contexts.
+ *
+ * @constant {React.ComponentType<ISocialShareButtonProps>}
+ */
+export const Telegram = createSocialShareButton('telegram');
