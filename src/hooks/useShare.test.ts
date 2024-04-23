@@ -1,7 +1,9 @@
-import { act } from '@testing-library/react-hooks';
-import { renderHook } from '@testing-library/react';
-import { useShare } from './useShare';
+import { act, renderHook } from '@testing-library/react';
 import * as shareFunctionsModule from '../config/shareFunctions';
+import { useShare } from './useShare';
+
+const subject = 'Test Subject';
+const testURL = 'http://example.com';
 
 jest.mock('../config/shareConfig', () => ({
     shareGroup: {
@@ -17,48 +19,39 @@ jest.mock('../config/shareFunctions', () => ({
     shareLink: jest.fn(),
 }));
 
+const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null);
+const printSpy = jest.spyOn(window, 'print').mockImplementation(() => {});
+
 describe('useShare hook', () => {
-    it('should call printPage when shareType is "print"', () => {
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        openSpy.mockRestore();
+        printSpy.mockRestore();
+    });
+
+    it('should handle different share types correctly', () => {
         const { result } = renderHook(useShare);
         const { target } = result.current;
 
-        act(() => {
-            target('print', 'https://example.com');
-        });
-
+        act(() => target('print', testURL));
         expect(shareFunctionsModule.printPage).toHaveBeenCalled();
-    });
 
-    it('should call sendEmail when shareType is "email"', () => {
-        const { result } = renderHook(useShare);
-        const { target } = result.current;
+        act(() => target('email', testURL, 'Test Subject'));
+        expect(shareFunctionsModule.sendEmail).toHaveBeenCalledWith(testURL, subject);
 
-        act(() => {
-            target('email', 'https://example.com', 'Test Subject');
-        });
+        act(() => target('link', testURL));
+        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('link', testURL);
 
-        expect(shareFunctionsModule.sendEmail).toHaveBeenCalledWith('https://example.com', 'Test Subject');
-    });
+        act(() => target('email', testURL));
+        expect(shareFunctionsModule.sendEmail).toHaveBeenCalledWith(testURL, '');
 
-    it('should call shareLink when shareType is not "print" or "email"', () => {
-        const { result } = renderHook(useShare);
-        const { target } = result.current;
+        const currentLink = 'http://example.com';
 
-        act(() => {
-            target('link', 'https://example.com');
-        });
-
-        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('link', 'https://example.com');
-    });
-
-    it('should call sendEmail with a default subject when subject is not provided', () => {
-        const { result } = renderHook(useShare);
-        const { target } = result.current;
-
-        act(() => {
-            target('email', 'https://example.com');
-        });
-
-        expect(shareFunctionsModule.sendEmail).toHaveBeenCalledWith('https://example.com', '');
+        act(() => target('email', currentLink, subject));
+        expect(shareFunctionsModule.sendEmail).toHaveBeenCalledWith(currentLink, subject);
+        // expect(window.open).toHaveBeenCalledWith(`mailto:?subject=${subject}&body=${encodeURIComponent(encodeURIComponent(currentLink))}`);
     });
 });
