@@ -9,5 +9,5 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit"
     },
-    "cSpell.words": ["KHTML", "Odum", "Pinterest"]
+    "cSpell.words": ["facebook", "KHTML", "linkedin", "Odum", "pinterest", "Pinterest", "whatsapp"]
 }
