@@ -46,10 +46,10 @@ yarn add  react-quick-share
 ## Usage
 
 Simply import the component you want and wrap your child node with it. This gives you the power to decide exactly how your share component should
-look. The child node could be a simple text - as in the examples used here -, an icon component, or a custom component. You only need to pass in the
-`url` you want to share. If you do not pass this prop though, the component will share the url of the page where you render it. Also, in some rare
-cases you may want to style these base components to achieve certain stylistic goals. All you need do is create and pass in your styles object as a
-`style` prop.
+look. The child node could be a simple text - as in the examples used here, an icon component, or a custom component. You only need to pass in the
+`url` you want to share.
+
+> If you do not pass the `url` prop, the component will share the url of the page where you render it.
 
 ```js
 import { Facebook, Twitter, Whatsapp } from 'react-quick-share';
@@ -72,8 +72,6 @@ export const SocialMediaShare = () => {
     );
 };
 ```
-
-If you prefer, you can also style your buttons directly either by passing in a `style` property, or a `className` property.
 
 ## Extending Usage
 
@@ -114,9 +112,11 @@ Each share button component accepts the following props along with regular Butto
 
 ## Custom Styles
 
-These share components provide a style prop that can be used to pass custom styles such as border radii and box shadow. However, it is best if you
-simply wrap the share components with your own appropriately styled components. You can also pass you custom components as children to the share
-components.
+In some rare cases you may want to style these base components to achieve certain stylistic goals. In that case you will need to create and pass in
+your styles object as a `style` prop.
+
+However, it is best to simply wrap the react-quick-share components with your own appropriately styled components. You can also pass your custom
+components as children to the react-quick-share components.
 
 ```js
 import { Facebook, Twitter } from 'react-quick-share';
