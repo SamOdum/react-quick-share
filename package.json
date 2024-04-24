@@ -1,6 +1,6 @@
 {
     "name": "react-quick-share",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "description": "A lightweight and highly customizable React module for integrating social media sharing buttons. It supports a variety of platforms, including Facebook, WhatsApp, Twitter, LinkedIn, Pinterest, Telegram, and Email, with additional support for custom extensions. Optimized for both desktop and mobile, react-quick-share provides a straightforward API that allows for easy embedding and styling of share buttons to enhance social sharing capabilities of web applications.",
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
