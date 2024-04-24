@@ -1,4 +1,10 @@
+[![npm version](https://badge.fury.io/js/react-quick-share.svg)](https://badge.fury.io/js/react-quick-share)
+![example workflow](https://github.com/SamOdum/react-quick-share/actions/workflows/build.yml/badge.svg)
 ![GitHub](https://img.shields.io/github/license/SamOdum/react-quick-share)
+[![Maintainability](https://api.codeclimate.com/v1/badges/e49dc83aa20662598bf4/maintainability)](https://codeclimate.com/github/SamOdum/react-quick-share/maintainability)
+[![Coverage Status](https://coveralls.io/repos/github/SamOdum/react-quick-share/badge.svg?branch=main)](https://coveralls.io/github/SamOdum/react-quick-share?branch=main)
+
+<!-- [![Dependencies](https://img.shields.io/librariesio/release/npm/react-quick-share)](https://libraries.io/npm/react-quick-share) -->
 
 # React-Quick-Share
 
@@ -46,7 +52,7 @@ cases you may want to style these base components to achieve certain stylistic g
 `style` prop.
 
 ```js
-import { Facebook, Twitter, Whatsapp } from ' quick-share';
+import { Facebook, Twitter, Whatsapp } from 'react-quick-share';
 
 export const SocialMediaShare = () => {
     const url = 'www.the-url-you-want-to-share.com';
@@ -71,26 +77,26 @@ If you prefer, you can also style your buttons directly either by passing in a `
 
 ## Extending Usage
 
-If you need to share to a social media platform not already supported out-of-the-box, you will need the `extendShare` object and the
-`createSocialShareButton` function. The `extendShare` variable accepts a key of the name of the new platform, and an object value that contains
-`shareType` set to `link`, and `url` set to the new platform's share endpoint.
+If you need to share to a social media domain not already supported out-of-the-box, you will need the `extendShare` object and the
+`createSocialShareButton` function. The `extendShare` object accepts a key of the name of the new domain, and an object value that contains
+`shareType` set to `link`, and `url` set to the new domain's share endpoint.
 
-The `createSocialShareButton` component takes the usual `url` prop and an additional `domain` prop.
+The `createSocialShareButton` component takes the `newDomain` string as argument.
 
 ```js
 import { extendShare, createSocialShareButton } from 'react-quick-share';
 
-extendShare.newPlatform = {
+extendShare.newDomain = {
     shareType: 'link',
-    url: 'https://www.newPlatform.com/sharing/?url=',
+    url: 'https://www.newDomain.com/sharing/?url=',
 };
 
-const MyCustomShareButton = createSocialShareButton('newPlatform');
+const MyCustomShareButton = createSocialShareButton('newDomain');
 
 export const SocialMediaShare = () => {
     const url = 'www.the-url-you-want-to-share.com';
 
-    return <MyCustomShareButton url={url}>Share on My Platform</MyCustomShareButton>;
+    return <MyCustomShareButton url={url}>Share on My Domain</MyCustomShareButton>;
 };
 ```
 
@@ -108,10 +114,12 @@ Each share button component accepts the following props along with regular Butto
 
 ## Custom Styles
 
-These share components provide a style prop that can be used to pass custom styles such as border radii and box shadow.
+These share components provide a style prop that can be used to pass custom styles such as border radii and box shadow. However, it is best if you
+simply wrap the share components with your own appropriately styled components. You can also pass you custom components as children to the share
+components.
 
 ```js
-import { Facebook, Twitter } from ' quick-share';
+import { Facebook, Twitter } from 'react-quick-share';
 
 const style = {
     borderRadius: '4px',
@@ -122,16 +130,26 @@ export const SocialMediaShare = () => {
     const url = 'www.the-url-you-want-to-share.com';
 
     return (
-        <Facebook url={url} style={style}>
-            <span className="up-to-you">Facebook</span>
-        </Facebook>
+        <>
+            <!-- wrap the share components with your own component -->
+            <span className="up-to-you">
+                <Twitter url={url} style={style}>
+                Twitter
+                </Twitter>
+            </span>
+
+            <!-- pass your own components as children -->
+            <Facebook url={url} style={style}>
+                <span className="up-to-you">Facebook</span>
+            </Facebook>
+        <>
     );
 };
 ```
 
 ## Contributing
 
-Feel free to contribute or suggest improvements via issues or pull requests.
+You are welcome to contribute or suggest improvements via issues or pull requests.
 
 ## License
 
