@@ -1,79 +1,76 @@
-import '@testing-library/jest-dom';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { useShare } from '../hooks/useShare';
-import { Email, Print, ShareButton } from './Button';
+import { Email, Facebook, Linkedin, Pinterest, Print, Telegram, Twitter, Whatsapp } from '../components/Button';
+import * as shareFunctionsModule from '../config/shareFunctions';
 
 const testURL = 'http://www.example.com';
 
-jest.mock('../hooks/useShare', () => ({
-    useShare: jest.fn(() => ({ target: jest.fn() })),
+jest.mock('../config/shareFunctions', () => ({
+    printPage: jest.fn(),
+    sendEmail: jest.fn(),
+    shareLink: jest.fn(),
+    shareOnWhatsapp: jest.fn(),
+    shareOnTwitter: jest.fn(),
+    shareOnFacebook: jest.fn(),
+    shareOnPinterest: jest.fn(),
+    shareOnLinkedin: jest.fn(),
+    shareOnTelegram: jest.fn(),
 }));
 
-describe('ShareButton component', () => {
-    it('displays the button with expected text', () => {
-        const { getByRole } = render(
-            <ShareButton domain="facebook" url={testURL}>
-                Share on Facebook
-            </ShareButton>
+describe('Share Buttons', () => {
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('should handle Print button correctly', () => {
+        render(<Print url={testURL}>Print</Print>);
+        fireEvent.click(screen.getByText('Print'));
+        expect(shareFunctionsModule.printPage).toHaveBeenCalled();
+    });
+
+    it('should handle Email button correctly', () => {
+        render(
+            <Email url={testURL} subject="Test Subject">
+                Email
+            </Email>
         );
-        expect(getByRole('button').textContent).toBe('Share on Facebook');
+        fireEvent.click(screen.getByText('Email'));
+        expect(shareFunctionsModule.sendEmail).toHaveBeenCalledWith(testURL, 'Test Subject');
     });
 
-    it('renders child elements and assigns correct class', () => {
-        const { getByText } = render(
-            <ShareButton domain="facebook" url={testURL}>
-                <span className="test_span">Share on Facebook</span>
-            </ShareButton>
-        );
-        expect(getByText('Share on Facebook').className).toBe('test_span');
+    it('should handle Whatsapp button correctly', () => {
+        render(<Whatsapp url={testURL}>Whatsapp</Whatsapp>);
+        fireEvent.click(screen.getByText('Whatsapp'));
+        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('whatsapp', testURL);
     });
 
-    it('triggers the target function on click', () => {
-        const targetMock = jest.fn();
-        jest.mocked(useShare).mockReturnValue({ target: targetMock });
-        const { getByText } = render(
-            <ShareButton domain="facebook" url={testURL}>
-                Share on Facebook
-            </ShareButton>
-        );
-        fireEvent.click(getByText('Share on Facebook'));
-        expect(targetMock).toHaveBeenCalledWith('facebook', testURL, undefined);
-    });
-});
-
-describe('Print component', () => {
-    it('renders and triggers target function with "print" domain on click', () => {
-        const targetMock = jest.fn();
-        jest.mocked(useShare).mockReturnValue({ target: targetMock });
-        const { getByText } = render(<Print url={testURL}>Print</Print>);
-        fireEvent.click(getByText('Print'));
-        expect(targetMock).toHaveBeenCalledWith('print', testURL, undefined);
+    it('should handle Twitter button correctly', () => {
+        render(<Twitter url={testURL}>Twitter</Twitter>);
+        fireEvent.click(screen.getByText('Twitter'));
+        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('twitter', testURL);
     });
 
-    it('uses current window URL if none provided', () => {
-        const targetMock = jest.fn();
-        jest.mocked(useShare).mockReturnValue({ target: targetMock });
-        const { getByRole } = render(<Print>Print</Print>);
-        fireEvent.click(getByRole('button'));
-        expect(targetMock).toHaveBeenCalledWith('print', window.location.href, undefined);
-    });
-});
-
-describe('Email component', () => {
-    it('renders and calls target function with "email" domain on click', () => {
-        const targetMock = jest.fn();
-        jest.mocked(useShare).mockReturnValue({ target: targetMock });
-        const { getByText } = render(<Email url={testURL}>Email</Email>);
-        fireEvent.click(getByText('Email'));
-        expect(targetMock).toHaveBeenCalledWith('email', testURL, undefined);
+    it('should handle Facebook button correctly', () => {
+        render(<Facebook url={testURL}>Facebook</Facebook>);
+        fireEvent.click(screen.getByText('Facebook'));
+        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('facebook', testURL);
     });
 
-    it('defaults to current window URL if no URL provided', () => {
-        const targetMock = jest.fn();
-        jest.mocked(useShare).mockReturnValue({ target: targetMock });
-        const { getByRole } = render(<Email>Email</Email>);
-        fireEvent.click(getByRole('button'));
-        expect(targetMock).toHaveBeenCalledWith('email', window.location.href, undefined);
+    it('should handle Pinterest button correctly', () => {
+        render(<Pinterest url={testURL}>Pinterest</Pinterest>);
+        fireEvent.click(screen.getByText('Pinterest'));
+        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('pinterest', testURL);
+    });
+
+    it('should handle Linkedin button correctly', () => {
+        render(<Linkedin url={testURL}>Linkedin</Linkedin>);
+        fireEvent.click(screen.getByText('Linkedin'));
+        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('linkedin', testURL);
+    });
+
+    it('should handle Telegram button correctly', () => {
+        render(<Telegram url={testURL}>Telegram</Telegram>);
+        fireEvent.click(screen.getByText('Telegram'));
+        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('telegram', testURL);
     });
 });

@@ -6,15 +6,19 @@
         "jsx": "react",
         "lib": ["ES5", "ES2015", "ES2016", "DOM", "ESNext"],
         "types": ["node", "jest"],
-        "module": "es2015",
+        "module": "ESNext",
+        "forceConsistentCasingInFileNames": true,
+        "isolatedModules": true,
+        "skipLibCheck": true,
+        "noEmit": true,
         "moduleResolution": "node",
         "noImplicitAny": true,
         "noUnusedLocals": true,
         "outDir": "dist/esm",
         "sourceMap": true,
         "strict": true,
-        "target": "es6",
+        "target": "es6"
     },
     "include": ["src/**/*.ts", "src/**/*.tsx"],
-    "exclude": ["dist", "node_modules"],
+    "exclude": ["dist", "node_modules"]
 }
