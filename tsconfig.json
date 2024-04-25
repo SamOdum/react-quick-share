@@ -10,7 +10,6 @@
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": true,
         "skipLibCheck": true,
-        "noEmit": true,
         "moduleResolution": "node",
         "noImplicitAny": true,
         "noUnusedLocals": true,

@@ -21,8 +21,8 @@
     },
     "scripts": {
         "build": "rm -rf dist/ && prettier --write src/ && pnpm build:esm && pnpm build:cjs",
-        "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
-        "build:esm": "tsc --outDir dist/esm",
+        "build:cjs": "tsc -p tsconfig.build.json --module CommonJS --outDir dist/cjs",
+        "build:esm": "tsc -p tsconfig.build.json --outDir dist/esm",
         "fix": "pnpm format",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
