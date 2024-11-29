@@ -2,12 +2,15 @@ import React from 'react';
 import { useShare } from '../hooks/useShare';
 import { ExtendShareGroupKey, IShareButtonProps, ISocialShareButtonProps, ShareGroupKey } from '../types';
 
-export const ShareButton = ({ children, domain, url = window.location.href, subject, style, ...rest }: IShareButtonProps) => {
+export const ShareButton = ({ children, domain, url, subject, style, ...rest }: IShareButtonProps) => {
     const { target } = useShare();
     const buttonStyle = { border: 'none', margin: '0', padding: '0', ...style };
 
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+    const shareUrl = url || currentUrl;
+
     return (
-        <button {...rest} style={buttonStyle} onClick={() => target(domain, url, subject)}>
+        <button {...rest} style={buttonStyle} onClick={() => target(domain, shareUrl, subject)}>
             {children}
         </button>
     );

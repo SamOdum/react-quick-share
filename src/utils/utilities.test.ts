@@ -48,10 +48,18 @@ describe('Utilities', () => {
 
         it('handles cases where window is undefined', () => {
             const originalWindow = { ...window };
+            const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             delete (global as any).window;
-            expect(() => openTarget(testURL)).toThrow();
+
+            // Function should not throw, but should log a warning
+            expect(() => openTarget(testURL)).not.toThrow();
+            expect(consoleSpy).toHaveBeenCalledWith('Cannot open URL in non-browser environment');
+
+            // Cleanup
             global.window = originalWindow;
+            consoleSpy.mockRestore();
         });
     });
 });
