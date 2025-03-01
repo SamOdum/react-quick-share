@@ -12,8 +12,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
               with:
-                  persist-credentials: true
-                  token: ${{ secrets.GH_TOKEN }}
+                  fetch-depth: 0
 
             - uses: pnpm/action-setup@v3
               with:
@@ -40,6 +39,6 @@ jobs:
 
             - name: Run Semantic Release
               env:
-                  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
               run: pnpx semantic-release
