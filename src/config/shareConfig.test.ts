@@ -1,6 +1,6 @@
+import { testUrlWithParams } from '../utils/test-helpers';
 import * as utilities from '../utils/utilities';
 import { extendShare, shareGroup } from './shareConfig';
-import { buildUrlWithParams } from './shareFunctions';
 
 // Mock the utilities module
 jest.mock('../utils/utilities');
@@ -127,9 +127,9 @@ describe('buildUrlWithParams', () => {
     it('builds a URL with just the main URL when no paramMap is provided', () => {
         const baseUrl = 'https://example.com/';
         const mainUrl = 'https://mysite.com/';
+        const expectedUrl = `${baseUrl}${encodeURIComponent(mainUrl)}`;
 
-        const result = buildUrlWithParams(baseUrl, mainUrl);
-        expect(result).toBe(`${baseUrl}${encodeURIComponent(mainUrl)}`);
+        testUrlWithParams(baseUrl, mainUrl, undefined, undefined, expectedUrl);
     });
 
     it('builds a URL with parameters mapped correctly', () => {
@@ -138,14 +138,12 @@ describe('buildUrlWithParams', () => {
         const paramMap = { url: 'u', title: 't' };
         const urlParams = { title: 'My Title' };
 
-        const result = buildUrlWithParams(baseUrl, mainUrl, paramMap, urlParams);
-
         // Create expected URL for comparison
         const expectedUrl = new URL(baseUrl);
         expectedUrl.searchParams.append('u', mainUrl);
         expectedUrl.searchParams.append('t', 'My Title');
 
-        expect(result).toBe(expectedUrl.toString());
+        testUrlWithParams(baseUrl, mainUrl, paramMap, urlParams, expectedUrl.toString());
     });
 
     it('ignores parameters not in the paramMap', () => {
@@ -154,14 +152,13 @@ describe('buildUrlWithParams', () => {
         const paramMap = { url: 'u', title: 't' };
         const urlParams = { title: 'My Title', unknown: 'Should be ignored' };
 
-        const result = buildUrlWithParams(baseUrl, mainUrl, paramMap, urlParams);
-
         // Create expected URL for comparison
         const expectedUrl = new URL(baseUrl);
         expectedUrl.searchParams.append('u', mainUrl);
         expectedUrl.searchParams.append('t', 'My Title');
 
-        expect(result).toBe(expectedUrl.toString());
+        const result = testUrlWithParams(baseUrl, mainUrl, paramMap, urlParams, expectedUrl.toString());
+
         // Verify the unknown param is not included
         expect(result).not.toContain('Should be ignored');
     });

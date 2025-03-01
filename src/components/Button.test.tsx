@@ -1,5 +1,6 @@
 import { ShareButton, createSocialShareButton } from '../components/Button';
 import * as useShareModule from '../hooks/useShare';
+import { testSocialButtonDomain } from '../utils/test-helpers';
 
 const testURL = 'http://www.example.com';
 
@@ -164,75 +165,61 @@ describe('Social Share Buttons', () => {
     });
 
     it('should create Print button with correct domain', () => {
-        const button = Print({ url: testURL, children: 'Print' });
-        expect(button.props.domain).toBe('print');
+        testSocialButtonDomain(Print, 'print', testURL, 'Print');
     });
 
     it('should create Email button with correct domain', () => {
-        const button = Email({ url: testURL, subject: 'Test Subject', children: 'Email' });
-        expect(button.props.domain).toBe('email');
+        const button = testSocialButtonDomain(Email, 'email', testURL, 'Email', { subject: 'Test Subject' });
         expect(button.props.subject).toBe('Test Subject');
     });
 
     it('should create Whatsapp button with correct domain', () => {
-        const button = Whatsapp({ url: testURL, children: 'Whatsapp' });
-        expect(button.props.domain).toBe('whatsapp');
+        testSocialButtonDomain(Whatsapp, 'whatsapp', testURL, 'Whatsapp');
     });
 
     it('should create Twitter button with correct domain', () => {
-        const button = Twitter({ url: testURL, children: 'Twitter' });
-        expect(button.props.domain).toBe('twitter');
+        testSocialButtonDomain(Twitter, 'twitter', testURL, 'Twitter');
     });
 
     it('should create Facebook button with correct domain', () => {
-        const button = Facebook({ url: testURL, children: 'Facebook' });
-        expect(button.props.domain).toBe('facebook');
+        testSocialButtonDomain(Facebook, 'facebook', testURL, 'Facebook');
     });
 
     it('should create Pinterest button with correct domain', () => {
-        const button = Pinterest({ url: testURL, children: 'Pinterest' });
-        expect(button.props.domain).toBe('pinterest');
+        testSocialButtonDomain(Pinterest, 'pinterest', testURL, 'Pinterest');
     });
 
     it('should create Linkedin button with correct domain', () => {
-        const button = Linkedin({ url: testURL, children: 'Linkedin' });
-        expect(button.props.domain).toBe('linkedin');
+        testSocialButtonDomain(Linkedin, 'linkedin', testURL, 'Linkedin');
     });
 
     it('should create Telegram button with correct domain', () => {
-        const button = Telegram({ url: testURL, children: 'Telegram' });
-        expect(button.props.domain).toBe('telegram');
+        testSocialButtonDomain(Telegram, 'telegram', testURL, 'Telegram');
     });
 
     // Tests for new social media buttons
     it('should create Reddit button with correct domain', () => {
-        const button = Reddit({ url: testURL, children: 'Reddit' });
-        expect(button.props.domain).toBe('reddit');
+        testSocialButtonDomain(Reddit, 'reddit', testURL, 'Reddit');
     });
 
     it('should create Tumblr button with correct domain', () => {
-        const button = Tumblr({ url: testURL, children: 'Tumblr' });
-        expect(button.props.domain).toBe('tumblr');
+        testSocialButtonDomain(Tumblr, 'tumblr', testURL, 'Tumblr');
     });
 
     it('should create HackerNews button with correct domain', () => {
-        const button = HackerNews({ url: testURL, children: 'HackerNews' });
-        expect(button.props.domain).toBe('hackernews');
+        testSocialButtonDomain(HackerNews, 'hackernews', testURL, 'HackerNews');
     });
 
     it('should create Buffer button with correct domain', () => {
-        const button = Buffer({ url: testURL, children: 'Buffer' });
-        expect(button.props.domain).toBe('buffer');
+        testSocialButtonDomain(Buffer, 'buffer', testURL, 'Buffer');
     });
 
     it('should create Medium button with correct domain', () => {
-        const button = Medium({ url: testURL, children: 'Medium' });
-        expect(button.props.domain).toBe('medium');
+        testSocialButtonDomain(Medium, 'medium', testURL, 'Medium');
     });
 
     it('should create Pocket button with correct domain', () => {
-        const button = Pocket({ url: testURL, children: 'Pocket' });
-        expect(button.props.domain).toBe('pocket');
+        testSocialButtonDomain(Pocket, 'pocket', testURL, 'Pocket');
     });
 });
 

@@ -1,6 +1,7 @@
 import { openTarget } from '../utils/utilities';
 import { extendShare, shareGroup } from './shareConfig';
-import { printPage, sendEmail, shareLink, buildUrlWithParams } from './shareFunctions';
+import { printPage, sendEmail, shareLink } from './shareFunctions';
+import { testUrlWithParams } from '../utils/test-helpers';
 
 const testURL = 'http://example.com';
 
@@ -119,9 +120,9 @@ describe('buildUrlWithParams', () => {
     it('builds a URL with just the main URL when no paramMap is provided', () => {
         const baseUrl = 'https://example.com/';
         const mainUrl = 'https://mysite.com/';
+        const expectedUrl = `${baseUrl}${encodeURIComponent(mainUrl)}`;
 
-        const result = buildUrlWithParams(baseUrl, mainUrl);
-        expect(result).toBe(`${baseUrl}${encodeURIComponent(mainUrl)}`);
+        testUrlWithParams(baseUrl, mainUrl, undefined, undefined, expectedUrl);
     });
 
     it('builds a URL with parameters mapped correctly', () => {
@@ -130,14 +131,12 @@ describe('buildUrlWithParams', () => {
         const paramMap = { url: 'u', title: 't' };
         const urlParams = { title: 'My Title' };
 
-        const result = buildUrlWithParams(baseUrl, mainUrl, paramMap, urlParams);
-
         // Create expected URL for comparison
         const expectedUrl = new URL(baseUrl);
         expectedUrl.searchParams.append('u', mainUrl);
         expectedUrl.searchParams.append('t', 'My Title');
 
-        expect(result).toBe(expectedUrl.toString());
+        testUrlWithParams(baseUrl, mainUrl, paramMap, urlParams, expectedUrl.toString());
     });
 
     it('ignores parameters not in the paramMap', () => {
@@ -146,14 +145,13 @@ describe('buildUrlWithParams', () => {
         const paramMap = { url: 'u', title: 't' };
         const urlParams = { title: 'My Title', unknown: 'Should be ignored' };
 
-        const result = buildUrlWithParams(baseUrl, mainUrl, paramMap, urlParams);
-
         // Create expected URL for comparison
         const expectedUrl = new URL(baseUrl);
         expectedUrl.searchParams.append('u', mainUrl);
         expectedUrl.searchParams.append('t', 'My Title');
 
-        expect(result).toBe(expectedUrl.toString());
+        const result = testUrlWithParams(baseUrl, mainUrl, paramMap, urlParams, expectedUrl.toString());
+
         // Verify the unknown param is not included
         expect(result).not.toContain('Should be ignored');
     });
@@ -163,11 +161,8 @@ describe('buildUrlWithParams', () => {
         const mainUrl = 'https://mysite.com/';
         const paramMap = { title: 't' }; // No 'url' mapping
         const urlParams = { title: 'My Title' };
+        const expectedUrl = `${baseUrl}${encodeURIComponent(mainUrl)}`;
 
-        const result = buildUrlWithParams(baseUrl, mainUrl, paramMap, urlParams);
-
-        // Should fall back to appending the URL directly without adding other parameters
-        // This is the current implementation behavior
-        expect(result).toBe(`${baseUrl}${encodeURIComponent(mainUrl)}`);
+        testUrlWithParams(baseUrl, mainUrl, paramMap, urlParams, expectedUrl);
     });
 });
