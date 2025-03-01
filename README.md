@@ -12,21 +12,22 @@ A simple but robust social media share module that facilitates sharing content o
 
 ## Features
 
--   **Ease of Use**: Simple API for integrating social sharing buttons.
--   **Customizable**: Extensible styles and properties.
--   **Support for Multiple Platforms**: Includes support for multiple platforms.
--   **Mobile Support**: Detects mobile devices to optimize sharing links.
+- **Ease of Use**: Simple API for integrating social sharing buttons.
+- **Customizable**: Extensible styles and properties.
+- **Support for Multiple Platforms**: Includes support for multiple platforms.
+- **Mobile Support**: Detects mobile devices to optimize sharing links.
+- **React 19 Support**: Compatible with both React 18 and React 19.
 
 This module includes components for sharing via:
 
--   Facebook
--   WhatsApp
--   Twitter
--   LinkedIn
--   Pinterest
--   Telegram
--   Email
--   Print
+- Facebook
+- WhatsApp
+- Twitter
+- LinkedIn
+- Pinterest
+- Telegram
+- Email
+- Print
 
 The plan is to expand these components to accommodate other social media platforms. In the meantime, you can also extend the components yourself
 through a simple API.

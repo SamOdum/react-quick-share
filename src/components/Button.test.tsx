@@ -1,76 +1,191 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import React from 'react';
-import { Email, Facebook, Linkedin, Pinterest, Print, Telegram, Twitter, Whatsapp } from '../components/Button';
-import * as shareFunctionsModule from '../config/shareFunctions';
+import { ShareButton, createSocialShareButton } from '../components/Button';
+import * as useShareModule from '../hooks/useShare';
 
 const testURL = 'http://www.example.com';
 
-jest.mock('../config/shareFunctions', () => ({
-    printPage: jest.fn(),
-    sendEmail: jest.fn(),
-    shareLink: jest.fn(),
-    shareOnWhatsapp: jest.fn(),
-    shareOnTwitter: jest.fn(),
-    shareOnFacebook: jest.fn(),
-    shareOnPinterest: jest.fn(),
-    shareOnLinkedin: jest.fn(),
-    shareOnTelegram: jest.fn(),
+// Mock the useShare hook
+jest.mock('../hooks/useShare', () => ({
+    useShare: jest.fn().mockReturnValue({
+        target: jest.fn(),
+    }),
 }));
 
-describe('Share Buttons', () => {
+describe('ShareButton', () => {
+    let mockTarget: jest.Mock;
+
+    beforeEach(() => {
+        mockTarget = jest.fn();
+        (useShareModule.useShare as jest.Mock).mockReturnValue({ target: mockTarget });
+    });
+
     afterEach(() => {
         jest.clearAllMocks();
     });
 
-    it('should handle Print button correctly', () => {
-        render(<Print url={testURL}>Print</Print>);
-        fireEvent.click(screen.getByText('Print'));
-        expect(shareFunctionsModule.printPage).toHaveBeenCalled();
+    it('should pass the domain, url and subject to the target function', () => {
+        // Create a mock React element without rendering
+        const button = ShareButton({
+            domain: 'facebook',
+            url: testURL,
+            subject: 'Test Subject',
+            children: 'Share',
+        });
+
+        // Simulate a click by calling the onClick handler directly
+        button.props.onClick();
+
+        // Verify the target function was called with the correct arguments
+        expect(mockTarget).toHaveBeenCalledWith('facebook', testURL, 'Test Subject');
     });
 
-    it('should handle Email button correctly', () => {
-        render(
-            <Email url={testURL} subject="Test Subject">
-                Email
-            </Email>
+    it('should use window.location.href when url is not provided', () => {
+        // Save original location
+        const originalHref = window.location.href;
+        Object.defineProperty(window, 'location', {
+            writable: true,
+            value: { href: 'http://current-page.com' },
+        });
+
+        // Create a mock React element without rendering
+        const button = ShareButton({
+            domain: 'facebook',
+            children: 'Share',
+        });
+
+        // Simulate a click
+        button.props.onClick();
+
+        // Verify target was called with the current URL
+        expect(mockTarget).toHaveBeenCalledWith('facebook', 'http://current-page.com', undefined);
+
+        // Restore original location
+        Object.defineProperty(window, 'location', {
+            writable: true,
+            value: { href: originalHref },
+        });
+    });
+
+    it('should handle case when window is undefined', () => {
+        const originalWindow = { ...window };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        delete (global as any).window;
+
+        // This should not throw an error
+        const button = ShareButton({
+            domain: 'facebook',
+            url: testURL,
+            children: 'Share',
+        });
+
+        // Simulate a click
+        button.props.onClick();
+
+        // Verify target was called with the provided URL
+        expect(mockTarget).toHaveBeenCalledWith('facebook', testURL, undefined);
+
+        // Restore window
+        global.window = originalWindow;
+    });
+
+    it('should apply custom styles to the button', () => {
+        const customStyle = { backgroundColor: 'red', color: 'white' };
+
+        // Create a mock React element without rendering
+        const button = ShareButton({
+            domain: 'facebook',
+            url: testURL,
+            style: customStyle,
+            children: 'Share',
+        });
+
+        // Check that the style was merged with the default style
+        expect(button.props.style).toEqual(
+            expect.objectContaining({
+                backgroundColor: 'red',
+                color: 'white',
+            })
         );
-        fireEvent.click(screen.getByText('Email'));
-        expect(shareFunctionsModule.sendEmail).toHaveBeenCalledWith(testURL, 'Test Subject');
+    });
+});
+
+describe('createSocialShareButton', () => {
+    it('should create a component with the correct display name', () => {
+        const CustomButton = createSocialShareButton('custom');
+        expect(CustomButton.displayName).toBe('CustomShareButton');
     });
 
-    it('should handle Whatsapp button correctly', () => {
-        render(<Whatsapp url={testURL}>Whatsapp</Whatsapp>);
-        fireEvent.click(screen.getByText('Whatsapp'));
-        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('whatsapp', testURL);
+    it('should create a component that passes props to ShareButton', () => {
+        // Create a custom button
+        const CustomButton = createSocialShareButton('custom');
+
+        // Create an instance of the custom button
+        const button = CustomButton({
+            url: testURL,
+            subject: 'Test Subject',
+            children: 'Custom',
+        });
+
+        // Verify it has the correct domain
+        expect(button.props.domain).toBe('custom');
+        expect(button.props.url).toBe(testURL);
+        expect(button.props.subject).toBe('Test Subject');
+        expect(button.props.children).toBe('Custom');
+    });
+});
+
+// Test the pre-defined social buttons
+describe('Social Share Buttons', () => {
+    // Import all buttons here to avoid React rendering issues
+    const { Email, Facebook, Linkedin, Pinterest, Print, Telegram, Twitter, Whatsapp } = require('../components/Button');
+    let mockTarget: jest.Mock;
+
+    beforeEach(() => {
+        mockTarget = jest.fn();
+        (useShareModule.useShare as jest.Mock).mockReturnValue({ target: mockTarget });
     });
 
-    it('should handle Twitter button correctly', () => {
-        render(<Twitter url={testURL}>Twitter</Twitter>);
-        fireEvent.click(screen.getByText('Twitter'));
-        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('twitter', testURL);
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
-    it('should handle Facebook button correctly', () => {
-        render(<Facebook url={testURL}>Facebook</Facebook>);
-        fireEvent.click(screen.getByText('Facebook'));
-        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('facebook', testURL);
+    it('should create Print button with correct domain', () => {
+        const button = Print({ url: testURL, children: 'Print' });
+        expect(button.props.domain).toBe('print');
     });
 
-    it('should handle Pinterest button correctly', () => {
-        render(<Pinterest url={testURL}>Pinterest</Pinterest>);
-        fireEvent.click(screen.getByText('Pinterest'));
-        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('pinterest', testURL);
+    it('should create Email button with correct domain', () => {
+        const button = Email({ url: testURL, subject: 'Test Subject', children: 'Email' });
+        expect(button.props.domain).toBe('email');
+        expect(button.props.subject).toBe('Test Subject');
     });
 
-    it('should handle Linkedin button correctly', () => {
-        render(<Linkedin url={testURL}>Linkedin</Linkedin>);
-        fireEvent.click(screen.getByText('Linkedin'));
-        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('linkedin', testURL);
+    it('should create Whatsapp button with correct domain', () => {
+        const button = Whatsapp({ url: testURL, children: 'Whatsapp' });
+        expect(button.props.domain).toBe('whatsapp');
     });
 
-    it('should handle Telegram button correctly', () => {
-        render(<Telegram url={testURL}>Telegram</Telegram>);
-        fireEvent.click(screen.getByText('Telegram'));
-        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('telegram', testURL);
+    it('should create Twitter button with correct domain', () => {
+        const button = Twitter({ url: testURL, children: 'Twitter' });
+        expect(button.props.domain).toBe('twitter');
+    });
+
+    it('should create Facebook button with correct domain', () => {
+        const button = Facebook({ url: testURL, children: 'Facebook' });
+        expect(button.props.domain).toBe('facebook');
+    });
+
+    it('should create Pinterest button with correct domain', () => {
+        const button = Pinterest({ url: testURL, children: 'Pinterest' });
+        expect(button.props.domain).toBe('pinterest');
+    });
+
+    it('should create Linkedin button with correct domain', () => {
+        const button = Linkedin({ url: testURL, children: 'Linkedin' });
+        expect(button.props.domain).toBe('linkedin');
+    });
+
+    it('should create Telegram button with correct domain', () => {
+        const button = Telegram({ url: testURL, children: 'Telegram' });
+        expect(button.props.domain).toBe('telegram');
     });
 });

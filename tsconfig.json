@@ -3,7 +3,7 @@
         "allowSyntheticDefaultImports": true,
         "declaration": true,
         "esModuleInterop": true,
-        "jsx": "react",
+        "jsx": "react-jsx",
         "lib": ["ES5", "ES2015", "ES2016", "DOM", "ESNext"],
         "types": ["node", "jest"],
         "module": "ESNext",
@@ -16,7 +16,7 @@
         "outDir": "dist/esm",
         "sourceMap": true,
         "strict": true,
-        "target": "es6"
+        "target": "es2020"
     },
     "include": ["src/**/*.ts", "src/**/*.tsx"],
     "exclude": ["dist", "node_modules"]
