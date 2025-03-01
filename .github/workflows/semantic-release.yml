@@ -12,7 +12,8 @@ jobs:
         steps:
             - uses: actions/checkout@v3
               with:
-                  persist-credentials: false
+                  persist-credentials: true
+                  token: ${{ secrets.GH_TOKEN }}
 
             - uses: pnpm/action-setup@v3
               with:
