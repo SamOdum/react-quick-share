@@ -11,7 +11,7 @@
         "branches": [
             "main"
         ],
-        "repositoryUrl": "https://github.com/samodum/react-quick-share.git",
+        "repositoryUrl": "git@github.com:samodum/react-quick-share.git",
         "plugins": [
             "@semantic-release/commit-analyzer",
             "@semantic-release/release-notes-generator",

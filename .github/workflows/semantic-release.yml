@@ -38,8 +38,13 @@ jobs:
             - name: Build the project
               run: pnpm run build
 
+            - name: Setup Git User
+              run: |
+                  git config --global user.name "github-actions"
+                  git config --global user.email "github-actions@github.com"
+
             - name: Run Semantic Release
               env:
-                  GH_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
+                  GH_TOKEN: ${{ secrets.GH_TOKEN }}
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
               run: pnpx semantic-release
