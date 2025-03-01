@@ -1,4 +1,4 @@
-[![npm version](https://badge.fury.io/js/react-quick-share.svg)](https://badge.fury.io/js/react-quick-share)
+[![npm version](https://img.shields.io/npm/v/react-quick-share.svg)](https://www.npmjs.com/package/react-quick-share)
 ![example workflow](https://github.com/SamOdum/react-quick-share/actions/workflows/build.yml/badge.svg)
 ![GitHub](https://img.shields.io/github/license/SamOdum/react-quick-share)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e49dc83aa20662598bf4/maintainability)](https://codeclimate.com/github/SamOdum/react-quick-share/maintainability)
@@ -16,7 +16,9 @@ A simple but robust social media share module that facilitates sharing content o
 - **Customizable**: Extensible styles and properties.
 - **Support for Multiple Platforms**: Includes support for multiple platforms.
 - **Mobile Support**: Detects mobile devices to optimize sharing links.
+- **Advanced URL Parameters**: Support for platform-specific URL parameters like title, description, etc.
 - **React 19 Support**: Compatible with both React 18 and React 19.
+- **100% Test Coverage**: Comprehensive test coverage for all code paths.
 
 This module includes components for sharing via:
 
@@ -26,6 +28,12 @@ This module includes components for sharing via:
 - LinkedIn
 - Pinterest
 - Telegram
+- Reddit
+- Tumblr
+- Hacker News
+- Buffer
+- Medium
+- Pocket
 - Email
 - Print
 
@@ -74,6 +82,38 @@ export const SocialMediaShare = () => {
 };
 ```
 
+### Advanced Usage with URL Parameters
+
+Some platforms support additional parameters like title, description, etc. You can pass these parameters using the `urlParams` prop:
+
+```js
+import { Reddit, Tumblr } from 'react-quick-share';
+
+export const AdvancedSocialMediaShare = () => {
+    const url = 'www.the-url-you-want-to-share.com';
+    const title = 'Check out this awesome article!';
+    const description = 'This is a detailed description of the article content.';
+
+    return (
+        <>
+            <Reddit url={url} urlParams={{ title: title }}>
+                Share on Reddit with Title
+            </Reddit>
+
+            <Tumblr
+                url={url}
+                urlParams={{
+                    title: title,
+                    text: description,
+                }}
+            >
+                Share on Tumblr with Title and Description
+            </Tumblr>
+        </>
+    );
+};
+```
+
 ## Extending Usage
 
 If you need to share to a social media domain not already supported out-of-the-box, you will need the `extendShare` object and the
@@ -81,6 +121,8 @@ If you need to share to a social media domain not already supported out-of-the-b
 `shareType` set to `link`, and `url` set to the new domain's share endpoint.
 
 The `createSocialShareButton` component takes the `newDomain` string as argument.
+
+### Basic Extension
 
 ```js
 import { extendShare, createSocialShareButton } from 'react-quick-share';
@@ -99,17 +141,58 @@ export const SocialMediaShare = () => {
 };
 ```
 
+### Advanced Extension with Parameter Mapping
+
+For platforms that support additional parameters, you can define a `paramMap` that maps your parameter names to the platform's expected parameter
+names:
+
+```js
+import { extendShare, createSocialShareButton } from 'react-quick-share';
+
+extendShare.customPlatform = {
+    shareType: 'link',
+    url: 'https://www.example.com/share',
+    paramMap: {
+        url: 'u', // maps 'url' to the platform's 'u' parameter
+        title: 'title', // maps 'title' to the platform's 'title' parameter
+        description: 'desc', // maps 'description' to the platform's 'desc' parameter
+    },
+};
+
+const CustomPlatformButton = createSocialShareButton('customPlatform');
+
+export const AdvancedSocialMediaShare = () => {
+    const url = 'www.the-url-you-want-to-share.com';
+
+    return (
+        <CustomPlatformButton
+            url={url}
+            urlParams={{
+                title: 'My Custom Title',
+                description: 'My Custom Description',
+            }}
+        >
+            Share on Custom Platform
+        </CustomPlatformButton>
+    );
+};
+```
+
+This will generate a URL like:
+`https://www.example.com/share?u=www.the-url-you-want-to-share.com&title=My%20Custom%20Title&desc=My%20Custom%20Description`
+
 ## Props
 
 Each share button component accepts the following props along with regular ButtonHTMLAttributes:
 
-| Prop       | Type     | Description                                  | Default                |
-| ---------- | -------- | -------------------------------------------- | ---------------------- |
-| `url`      | `string` | The URL to be shared.                        | `window.location.href` |
-| `domain`   | `string` | The social media platform.                   | None                   |
-| `subject`  | `string` | Subject for the sharing link (email only).   | ""                     |
-| `style`    | `object` | Custom styles to apply to the button.        | `{}`                   |
-| `children` | `node`   | Custom label or element to render as button. | None                   |
+| Prop        | Type     | Description                                  | Default                |
+| ----------- | -------- | -------------------------------------------- | ---------------------- |
+| `url`       | `string` | The URL to be shared.                        | `window.location.href` |
+| `domain`    | `string` | The social media platform.                   | None                   |
+| `subject`   | `string` | Subject for the sharing link (email only).   | ""                     |
+| `urlParams` | `object` | Additional parameters for the sharing URL.   | `{}`                   |
+| `style`     | `object` | Custom styles to apply to the button.        | `{}`                   |
+| `children`  | `node`   | Custom label or element to render as button. | None                   |
 
 ## Custom Styles
 
@@ -132,18 +215,18 @@ export const SocialMediaShare = () => {
 
     return (
         <>
-            <!-- wrap the share components with your own component -->
+            {/* wrap the share components with your own component */}
             <span className="up-to-you">
                 <Twitter url={url} style={style}>
-                Twitter
+                    Twitter
                 </Twitter>
             </span>
 
-            <!-- pass your own components as children -->
+            {/* pass your own components as children */}
             <Facebook url={url} style={style}>
                 <span className="up-to-you">Facebook</span>
             </Facebook>
-        <>
+        </>
     );
 };
 ```
@@ -151,6 +234,17 @@ export const SocialMediaShare = () => {
 ## Contributing
 
 You are welcome to contribute or suggest improvements via issues or pull requests.
+
+## Quality Assurance
+
+React Quick Share maintains 100% test coverage across all metrics:
+
+- 100% statement coverage
+- 100% branch coverage
+- 100% function coverage
+- 100% line coverage
+
+This ensures the library functions correctly across different environments and edge cases.
 
 ## License
 
