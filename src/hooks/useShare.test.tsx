@@ -1,5 +1,4 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import React from 'react';
 import { Email, ShareButton } from '../components/Button';
 import * as shareFunctionsModule from '../config/shareFunctions';
 

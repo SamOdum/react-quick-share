@@ -1,4 +1,3 @@
-import React from 'react';
 import { useShare } from '../hooks/useShare';
 import { ExtendShareGroupKey, IShareButtonProps, ISocialShareButtonProps, ShareGroupKey } from '../types';
 
