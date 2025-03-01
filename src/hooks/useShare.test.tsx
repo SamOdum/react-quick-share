@@ -56,7 +56,7 @@ describe('UseShare Hook', () => {
             </ShareButton>
         );
         fireEvent.click(getByText('Link One'));
-        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('link', testURL);
+        expect(shareFunctionsModule.shareLink).toHaveBeenCalledWith('link', testURL, undefined);
 
         render(
             <ShareButton domain="email" url={testURL}>

@@ -1,1 +1,17 @@
-export { Print, Email, Whatsapp, Twitter, Facebook, Pinterest, Linkedin, Telegram, createSocialShareButton } from './Button';
+export {
+    Print,
+    Email,
+    Whatsapp,
+    Twitter,
+    Facebook,
+    Pinterest,
+    Linkedin,
+    Telegram,
+    Reddit,
+    Tumblr,
+    HackerNews,
+    Buffer,
+    Medium,
+    Pocket,
+    createSocialShareButton,
+} from './Button';

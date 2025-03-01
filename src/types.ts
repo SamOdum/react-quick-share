@@ -2,11 +2,18 @@ import { DetailedHTMLProps, ButtonHTMLAttributes, ReactNode } from 'react';
 
 export type ShareType = 'print' | 'email' | 'link';
 
+export interface UrlParams {
+    [key: string]: string;
+}
+
+export interface ShareConfig {
+    shareType: ShareType;
+    url: string;
+    paramMap?: Record<string, string>;
+}
+
 export interface IShareGroupProps {
-    [key: string]: {
-        shareType: ShareType;
-        url: string;
-    };
+    [key: string]: ShareConfig;
 }
 
 export type ShareGroupKey = Extract<keyof typeof import('./config/shareConfig').shareGroup, string>;
@@ -17,10 +24,12 @@ export interface IShareButtonProps extends DetailedHTMLProps<ButtonHTMLAttribute
     domain: ShareGroupKey;
     url?: string;
     subject?: string;
+    urlParams?: UrlParams;
 }
 
 export interface ISocialShareButtonProps {
     children?: ReactNode;
     url?: string;
     subject?: string;
+    urlParams?: UrlParams;
 }
